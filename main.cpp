@@ -3,7 +3,7 @@
 using std::cout;
 using std::vector;
 
-// TODO: Add PrintBoard function here.
+// PrintBoard --> print the vector
 void printBoard(vector<vector<int>> board) {
     // range-based for-loops:
     for (auto const &row : board) {
@@ -22,7 +22,7 @@ int main() {
                             {0, 1, 0, 0, 0, 0},
                             {0, 1, 0, 0, 0, 0},
                             {0, 0, 0, 0, 1, 0}};
-  // TODO: Call PrintBoard function here.
+
   printBoard(board);
   
 }
