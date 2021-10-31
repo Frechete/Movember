@@ -12,7 +12,7 @@ using std::string;
 using std::vector;
 using std::abs;
 
-enum class State {kEmpty, kObstacle, kClosed, kPath};
+enum class State {kEmpty, kObstacle, kClosed, kPath, kStart, kFinish};
 
 // directional deltas
 const int delta[4][2]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
@@ -134,6 +134,8 @@ vector<vector<State>> Search(vector<vector<State>> grid, int init[2], int goal[2
   int y = init[1];
   int g = 0;
   int h = Heuristic(x, y, goal[0],goal[1]);
+  grid[x][y] = State::kStart;
+  grid[goal[0]][goal[1]] = State::kFinish;
   AddToOpen(x, y, g, h, open, grid);
 
   while (open.size() > 0) {
@@ -164,6 +166,8 @@ string CellString(State cell) {
   switch(cell) {
     case State::kObstacle: return "⛰️   ";
     case State::kPath: return "🚗   ";
+    case State::kStart: return  "🚦 ";
+    case State::kFinish: return "🏁 ";
     default: return "0   "; 
   }
 }
