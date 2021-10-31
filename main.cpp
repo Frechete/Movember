@@ -14,6 +14,9 @@ using std::abs;
 
 enum class State {kEmpty, kObstacle, kClosed, kPath};
 
+// directional deltas
+const int delta[4][2]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
+
 
 vector<State> ParseLine(string line) {
     istringstream sline(line);
@@ -69,26 +72,17 @@ int Heuristic(int x1, int y1, int x2, int y2) {
 }
 
 
-// TODO: Write CheckValidCell here. Check that the 
-// cell is on the grid and not an obstacle (i.e. equals kEmpty).
-/*
-
-    Write a function bool CheckValidCell that accepts two ints for the x and y coordinates and a
-     reference to the grid. The function should do two things:
-
-        Check that the (x, y) coordinate pair is on the grid.
-        Check that the grid at (x, y) is kEmpty (this is the default case if the grid cell 
-        is not kClosed or a kObstacle). If both of these conditions are true, 
-        then CheckValidCell should return true. Otherwise, it should return false.
-
-*/
+/** 
+ * Check that a cell is valid: on the grid, not an obstacle, and clear. 
+ */
 bool CheckValidCell(int x, int y, vector<vector<State>> &grid) {
-  if(!(x > grid.size()) && (!(y > grid[x].size()))){
-    if(grid[x][y] == State::kEmpty)
-      return true;
-  }
+  bool on_grid_x = (x >= 0 && x < grid.size());
+  bool on_grid_y = (y >= 0 && y < grid[0].size());
+  if (on_grid_x && on_grid_y)
+    return grid[x][y] == State::kEmpty;
   return false;
 }
+
 
 /** 
  * Add a node to the open list and mark it as open. 
@@ -100,6 +94,34 @@ void AddToOpen(int x, int y, int g, int h, vector<vector<int>> &openlist, vector
 }
 
 
+/** 
+ * Expand current nodes's neighbors and add them to the open list.
+ */
+void ExpandNeighbors(vector<int> current, int goal[2], vector<vector<int>> &open, vector<vector<State>> grid) {
+
+  // TODO: Get current node's data.
+  int x, y, x2, y2, g, h;
+  x = current[0];
+  y = current[1];
+  g = current[2];
+  // TODO: Loop through current node's potential neighbors.
+  for (auto &row : delta) {
+    x2 = x + row[0];
+    y2 = y + row[1];
+
+
+    // TODO: Check that the potential neighbor's x2 and y2 values are on the grid and not closed.
+    if (CheckValidCell(x2, y2, grid)) {
+      // TODO: Increment g value, compute h value, and add neighbor to open list.
+      int h2 = Heuristic(x2, y2, goal[0], goal[1]);
+      AddToOpen(x2, y2, g+1, h2, open, grid);
+
+
+    }
+
+  }
+
+}
 /** 
  * Implementation of A* search algorithm
  */
@@ -129,7 +151,7 @@ vector<vector<State>> Search(vector<vector<State>> grid, int init[2], int goal[2
     }
     
     // If we're not done, expand search to current node's neighbors.
-    // ExpandNeighbors
+    ExpandNeighbors(current, goal, open, grid);
   }
   
   // We've run out of new nodes to explore and haven't found a path.
@@ -170,4 +192,5 @@ int main() {
   TestCompare();
   TestSearch();
   TestCheckValidCell();
+  TestExpandNeighbors();
 }
