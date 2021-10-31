@@ -52,7 +52,7 @@ int Heuristic(int x1, int y1, int x2, int y2) {
 void AddToOpen (int x, int y, int g, int h, vector<vector<int>> &openNodes, vector<vector<State>> &grid){
   vector<int> node{x, y, g, h};
   openNodes.push_back(node);
-  grid{x,y} = {KClosed, Kclosed};
+  grid{x,y} = KClosed;
 }
 
 /** 
