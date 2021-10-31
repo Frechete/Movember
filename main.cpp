@@ -97,31 +97,28 @@ void AddToOpen(int x, int y, int g, int h, vector<vector<int>> &openlist, vector
 /** 
  * Expand current nodes's neighbors and add them to the open list.
  */
-void ExpandNeighbors(vector<int> current, int goal[2], vector<vector<int>> &open, vector<vector<State>> grid) {
+void ExpandNeighbors(const vector<int> &current, int goal[2], vector<vector<int>> &openlist, vector<vector<State>> &grid) {
+  // Get current node's data.
+  int x = current[0];
+  int y = current[1];
+  int g = current[2];
 
-  // TODO: Get current node's data.
-  int x, y, x2, y2, g, h;
-  x = current[0];
-  y = current[1];
-  g = current[2];
-  // TODO: Loop through current node's potential neighbors.
-  for (auto &row : delta) {
-    x2 = x + row[0];
-    y2 = y + row[1];
+  // Loop through current node's potential neighbors.
+  for (int i = 0; i < 4; i++) {
+    int x2 = x + delta[i][0];
+    int y2 = y + delta[i][1];
 
-
-    // TODO: Check that the potential neighbor's x2 and y2 values are on the grid and not closed.
+    // Check that the potential neighbor's x2 and y2 values are on the grid and not closed.
     if (CheckValidCell(x2, y2, grid)) {
-      // TODO: Increment g value, compute h value, and add neighbor to open list.
+      // Increment g value and add neighbor to open list.
+      int g2 = g + 1;
       int h2 = Heuristic(x2, y2, goal[0], goal[1]);
-      AddToOpen(x2, y2, g+1, h2, open, grid);
-
-
+      AddToOpen(x2, y2, g2, h2, openlist, grid);
     }
-
   }
-
 }
+
+
 /** 
  * Implementation of A* search algorithm
  */
@@ -134,8 +131,6 @@ vector<vector<State>> Search(vector<vector<State>> grid, int init[2], int goal[2
   int y = init[1];
   int g = 0;
   int h = Heuristic(x, y, goal[0],goal[1]);
-  grid[x][y] = State::kStart;
-  grid[goal[0]][goal[1]] = State::kFinish;
   AddToOpen(x, y, g, h, open, grid);
 
   while (open.size() > 0) {
@@ -149,6 +144,8 @@ vector<vector<State>> Search(vector<vector<State>> grid, int init[2], int goal[2
 
     // Check if we're done.
     if (x == goal[0] && y == goal[1]) {
+      grid[init[0]][init[1]] = State::kStart;
+      grid[goal[0]][goal[1]] = State::kFinish;
       return grid;
     }
     
@@ -166,8 +163,8 @@ string CellString(State cell) {
   switch(cell) {
     case State::kObstacle: return "⛰️   ";
     case State::kPath: return "🚗   ";
-    case State::kStart: return  "🚦 ";
-    case State::kFinish: return "🏁 ";
+    case State::kStart: return "🚦   ";
+    case State::kFinish: return "🏁   ";
     default: return "0   "; 
   }
 }
