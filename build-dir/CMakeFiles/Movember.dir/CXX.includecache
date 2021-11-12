@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/marco/movember/Movember/main.cpp
+algorithm
+-
+fstream
+-
+iostream
+-
+sstream
+-
+string
+-
+vector
+-
+test.cpp
+/home/marco/movember/Movember/test.cpp
+
+/home/marco/movember/Movember/test.cpp
+
